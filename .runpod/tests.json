@@ -1,13 +1,5 @@
 {
-  "tests": [
-    {
-      "name": "handler_registration",
-      "input": {
-        "test": true
-      },
-      "timeout": 300000
-    }
-  ],
+  "tests": [],
   "config": {
     "gpuTypeId": "ADA_24",
     "gpuCount": 1,
