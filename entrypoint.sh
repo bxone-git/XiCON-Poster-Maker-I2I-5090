@@ -1,19 +1,29 @@
 #!/bin/bash
-# MINIMAL entrypoint - handler ONLY, no ComfyUI
-# Purpose: Test if handler can register with RunPod
+# PHASE 1: Ultra-minimal handler registration test
+# No CUDA, no ComfyUI, no models - just runpod handler
 echo "=========================================="
-echo "MINIMAL STARTUP TEST - $(date)"
+echo "HANDLER REGISTRATION TEST - $(date)"
 echo "=========================================="
-
-echo "--- System Info ---"
-nvidia-smi --query-gpu=name,driver_version,memory.total --format=csv,noheader 2>/dev/null || echo "nvidia-smi: NOT AVAILABLE"
-python --version 2>&1 || echo "python: NOT AVAILABLE"
-pip show runpod 2>/dev/null | grep -E "^(Name|Version)" || echo "runpod package: NOT FOUND"
+echo "Python: $(python --version 2>&1)"
+echo "RunPod: $(pip show runpod 2>/dev/null | grep Version)"
 echo ""
 
-echo "--- Volume Check ---"
-ls -la /runpod-volume/ 2>/dev/null | head -3 || echo "/runpod-volume: NOT MOUNTED"
-echo ""
+# Inline minimal handler - no external dependencies
+exec python -c "
+import runpod
+import json
 
-echo "--- Starting handler ONLY (no ComfyUI) ---"
-exec python handler.py
+print('Handler starting...')
+
+def handler(job):
+    job_input = job.get('input', {})
+    print(f'Job received: {json.dumps(job_input)[:200]}')
+    return {
+        'status': 'ok',
+        'message': 'XiCON Poster Maker handler registration successful',
+        'received_keys': list(job_input.keys())
+    }
+
+print('Calling runpod.serverless.start()...')
+runpod.serverless.start({'handler': handler})
+"
