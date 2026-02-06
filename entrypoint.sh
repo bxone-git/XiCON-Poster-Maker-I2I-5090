@@ -52,7 +52,7 @@ echo "SageAttention: ENABLED (RTX 5090 SM120 - SageAttention2++ kernels)"
 
 # Start ComfyUI
 echo "Starting ComfyUI with SageAttention2++..."
-python /ComfyUI/main.py --listen &
+python /ComfyUI/main.py --listen --use-sage-attention &
 
 # Wait for ComfyUI
 echo "Waiting for ComfyUI..."

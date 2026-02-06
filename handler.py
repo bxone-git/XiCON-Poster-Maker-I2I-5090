@@ -135,6 +135,15 @@ def handler(job):
         image_path = process_input(job_input["image_url"], task_id, "input_image.jpg", "url")
     elif "image_base64" in job_input:
         image_path = process_input(job_input["image_base64"], task_id, "input_image.jpg", "base64")
+    # Support nested format: images.input_image or images.reference_image (from n8n/frontend)
+    elif "images" in job_input and isinstance(job_input["images"], dict):
+        images = job_input["images"]
+        if images.get("input_image"):
+            logger.info("Using nested format: images.input_image")
+            image_path = process_input(images["input_image"], task_id, "input_image.jpg", "url")
+        elif images.get("reference_image"):
+            logger.info("Using nested format: images.reference_image")
+            image_path = process_input(images["reference_image"], task_id, "input_image.jpg", "url")
 
     # Validate required inputs
     if image_path is None:
