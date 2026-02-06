@@ -2,7 +2,7 @@
 set -e
 
 echo "=========================================="
-echo "Container startup (RTX 5090 + SageAttention2++) - $(date)"
+echo "Container startup (Ada/Blackwell + SageAttention) - $(date)"
 echo "=========================================="
 
 # Network Volume Setup
@@ -46,13 +46,26 @@ check_model "$NETVOLUME/models/diffusion_models/flux-2-klein-base-9b-fp8.safeten
 check_model "$NETVOLUME/models/text_encoders/qwen_3_8b_fp8mixed.safetensors"
 check_model "$NETVOLUME/models/vae/flux2-vae.safetensors"
 
-# SageAttention2++ 활성화
-export SAGEATTENTION_ENABLED=1
-echo "SageAttention: ENABLED (RTX 5090 SM120 - SageAttention2++ kernels)"
+# GPU Detection and SageAttention setup
+GPU_NAME=$(nvidia-smi --query-gpu=name --format=csv,noheader 2>/dev/null | head -1 || echo "Unknown")
+echo "Detected GPU: $GPU_NAME"
+
+SAGE_FLAG=""
+if echo "$GPU_NAME" | grep -qi "5090\|5080\|blackwell"; then
+    echo "SageAttention: ENABLED (Blackwell SM120 - SageAttention2++ kernels)"
+    export SAGEATTENTION_ENABLED=1
+    SAGE_FLAG="--use-sage-attention"
+elif echo "$GPU_NAME" | grep -qi "4090\|4080\|L40\|6000.*Ada\|ada"; then
+    echo "SageAttention: ENABLED (Ada SM89 kernels)"
+    export SAGEATTENTION_ENABLED=1
+    SAGE_FLAG="--use-sage-attention"
+else
+    echo "SageAttention: DISABLED (unknown GPU architecture)"
+fi
 
 # Start ComfyUI
-echo "Starting ComfyUI with SageAttention2++..."
-python /ComfyUI/main.py --listen --use-sage-attention &
+echo "Starting ComfyUI ${SAGE_FLAG:+with SageAttention}..."
+python /ComfyUI/main.py --listen $SAGE_FLAG &
 
 # Wait for ComfyUI
 echo "Waiting for ComfyUI..."

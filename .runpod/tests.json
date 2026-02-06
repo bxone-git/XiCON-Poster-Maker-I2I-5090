@@ -15,7 +15,7 @@
     }
   ],
   "config": {
-    "gpuTypeId": "BLACKWELL_24",
+    "gpuTypeId": "ADA_24",
     "gpuCount": 1,
     "allowedCudaVersions": ["12.8"]
   }
