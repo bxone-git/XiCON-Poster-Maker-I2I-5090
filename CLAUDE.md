@@ -14,12 +14,12 @@ XiCON Poster Maker I2I - Flux 2 Klein 9B 기반 2단계 I2I 파이프라인
 
 | Component | Version |
 |-----------|---------|
-| Base Image | nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04 |
-| PyTorch | 2.8+ (cu128) |
-| CUDA | **12.8 (Required)** |
-| Target GPU | Ada (SM89) + Blackwell (SM120) |
+| Base Image | nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04 |
+| PyTorch | cu124 |
+| CUDA | **12.4** |
+| Target GPU | Ada (SM89): RTX 4090, L40, L40S, RTX 6000 Ada |
 | SageAttention | 2.2+ (auto-detected per GPU) |
-| Docker Tag | `blendx/xicon-poster-maker-i2i:5090` |
+| Docker Tag | Hub auto-build from GitHub |
 
 ## Build & Deploy Commands
 
