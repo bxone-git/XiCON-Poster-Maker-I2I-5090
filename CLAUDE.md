@@ -7,7 +7,7 @@ XiCON Poster Maker I2I - RTX 5090 Serverless Package
 XiCON Poster Maker I2I - Flux 2 Klein 9B 기반 2단계 I2I 파이프라인
 - Stage 1: 매거진 커버 + 타이포그래피 오버레이
 - Stage 2: 투명 봉투 패키징
-- **RTX 5090 (Blackwell SM120) 전용**
+- **Ada (RTX 4090/L40/L40S) + Blackwell (RTX 5090) 지원**
 - **Network Volume 방식** (Klein Gated 모델 인증 해결)
 
 ## Key Specifications
@@ -17,8 +17,8 @@ XiCON Poster Maker I2I - Flux 2 Klein 9B 기반 2단계 I2I 파이프라인
 | Base Image | nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04 |
 | PyTorch | 2.8+ (cu128) |
 | CUDA | **12.8 (Required)** |
-| Target GPU | RTX 5090 (SM120, Compute Capability 12.0) |
-| SageAttention | 2.2+ (SageAttention2++ kernels) |
+| Target GPU | Ada (SM89) + Blackwell (SM120) |
+| SageAttention | 2.2+ (auto-detected per GPU) |
 | Docker Tag | `blendx/xicon-poster-maker-i2i:5090` |
 
 ## Build & Deploy Commands
@@ -118,7 +118,7 @@ prompt["15:73"]["inputs"]["noise_seed"] = seed         # Seed
 |-------|-------|----------|
 | Network Volume not found | 볼륨 미연결 | RunPod에서 XiCON 볼륨 연결 |
 | Klein model not found | 모델 미다운로드 | `setup_netvolume.sh` 실행 |
-| CUDA error: no kernel image | 다른 GPU에서 실행 | RTX 5090 전용, 다른 GPU는 별도 이미지 |
+| CUDA error: no kernel image | 지원 안 되는 GPU | Ada(SM89) 또는 Blackwell(SM120) GPU 필요 |
 | SageAttention 오류 | 버전 불일치 | sageattention>=2.2.0 확인 |
 
 ## Version History

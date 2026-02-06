@@ -1,12 +1,13 @@
-# RTX 5090 Optimized - Poster Maker I2I
-# CUDA 12.8 + PyTorch cu128 + SageAttention 2.2+
-# Tag: blendx/xicon-poster-maker-i2i:5090
+# Poster Maker I2I - Ada GPU Optimized
+# CUDA 12.4 + PyTorch cu124 + SageAttention
+# Supports: RTX 4090, RTX 6000 Ada, L40, L40S
+# Tag: blendx/xicon-poster-maker-i2i:latest
 
-FROM nvidia/cuda:12.8.0-cudnn-devel-ubuntu22.04
+FROM nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV PYTHONUNBUFFERED=1
-ENV TORCH_CUDA_ARCH_LIST="8.9;12.0"
+ENV TORCH_CUDA_ARCH_LIST="8.9"
 
 # System dependencies
 RUN apt-get update && apt-get install -y \
@@ -16,9 +17,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/* \
     && ln -sf /usr/bin/python3.10 /usr/bin/python
 
-# PyTorch 2.8+ with CUDA 12.8
+# PyTorch with CUDA 12.4
 RUN pip install --upgrade pip && \
-    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu128
+    pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
 
 # SageAttention 2.2+ (SageAttention2++ kernels)
 RUN pip install sageattention>=2.2.0
